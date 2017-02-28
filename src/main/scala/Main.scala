@@ -24,7 +24,5 @@ object Main extends App {
     transaction <- registeredTransactions
   } domainBus << transaction
 
-
-
   //@TODO: Start def see leon's main/domain assembly?
 }
