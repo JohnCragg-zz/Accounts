@@ -1,15 +1,14 @@
 import java.io.File
 import java.util.concurrent.Executors
 
-import domain.transaction.{Debit, RegisterTransaction, Transaction, TransactionDomain}
-import org.joda.time.DateTime
+import domain.transaction.TransactionDomain
 import uk.camsw.cqrs.{EventBus, ServerAssembly}
 
 import scala.concurrent.ExecutionContext
 
 object Main extends App {
 
-  val statement = new File("c:/")
+  val statement = new File("c:/working/dev/Accounts/src/test/resources/latestStatement.csv")
 
   val domainBus = EventBus(ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor()))
 
@@ -18,9 +17,14 @@ object Main extends App {
     withActor(TransactionDomain())
   }
 
-  val transaction = Transaction(new DateTime(2017, 1, 1, 0, 0),
-    Debit, "", "", "", BigDecimal(0), BigDecimal(0), BigDecimal(0))
+  val statementReader = StatementReader
+  val registeredTransactions = statementReader.parseFile(statement)
 
-  domainBus << RegisterTransaction(transaction)
-  //@TODO: Start?
+  for {
+    transaction <- registeredTransactions
+  } domainBus << transaction
+
+
+
+  //@TODO: Start def see leon's main/domain assembly?
 }

@@ -1,7 +1,7 @@
 package domain.transaction
 
 import org.joda.time.DateTime
-
+//TODO: investigate local date
 case class Transaction(date: DateTime,
                        transactionType: TransactionType,
                        sortCode: String,

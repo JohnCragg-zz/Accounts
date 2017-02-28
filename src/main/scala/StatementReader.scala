@@ -1,13 +1,13 @@
 import java.io.File
 
-import domain.transaction.{Transaction, TransactionType}
+import domain.transaction.{RegisterTransaction, Transaction, TransactionType}
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import sun.security.provider.PolicyParser.ParsingException
 
 object StatementReader {
   val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy")
 
-  def read(statementLine: String): Transaction = {
+  def createTransaction(statementLine: String): Transaction = {
     val transaction: Array[String] = statementLine.split(",")
     transaction match {
       case Array(date, transactionType, sortCode, accountNumber, description, debitAmount, creditAmount, balanceAfter) =>
@@ -28,8 +28,10 @@ object StatementReader {
   def parseFile(file: File) = {
     val bufferedSource = io.Source.fromFile(file)
     val transactions = for {
-      line <- bufferedSource.getLines().drop(1)
-    } yield read(line)
+      line <- bufferedSource.getLines().drop(1).toList
+      transaction = createTransaction(line)
+    } yield RegisterTransaction(transaction)
+    //@TODO: do close in a finally block
     bufferedSource.close
     transactions
   }

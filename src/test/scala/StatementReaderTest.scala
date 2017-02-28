@@ -1,6 +1,6 @@
 import java.io.File
 
-import StatementReader.read
+import StatementReader.{parseFile, createTransaction}
 import domain.transaction._
 import org.joda.time.DateTime
 import org.scalatest.{FunSuite, Matchers}
@@ -12,12 +12,13 @@ class StatementReaderTest extends FunSuite with Matchers {
 
   test("can extract and format a line from the statement into a case class") {
     val statementLine = "20/02/2017,DEB,77-16-01,75792260,LIDL UK CD 2113 ,5.62,,300.06"
-    read(statementLine) shouldEqual t1
+    createTransaction(statementLine) shouldEqual t1
   }
 
   test("can parse a full sample statement into a List of Events") {
-    val statement = new File("C:working/dev/Accounts/src/test/resources/latestStatement.csv")
-//    parseFile(statement) should dispatch transactions
+    val statement = new File("c:/working/dev/Accounts/src/test/resources/latestStatement.csv")
+    val s = parseFile(statement)
+    println(s.toList)
   }
 }
 
@@ -31,7 +32,7 @@ object StatementReaderTest {
     BigDecimal("0.0"),
     BigDecimal("300.06"))
   val t2 = Transaction(
-    new DateTime(16, 2, 2017),
+    new DateTime(2017, 2, 16, 0, 0),
     IncomingPayment,
     "77-16-01",
     "75792260",
@@ -40,7 +41,7 @@ object StatementReaderTest {
     BigDecimal("6.10"),
     BigDecimal("338.92")
   )
-  val t3 = Transaction(new DateTime(15, 2, 2017),
+  val t3 = Transaction(new DateTime(2017, 2, 15, 0, 0),
     CashPoint,
     "77-16-01",
     "75792260",
@@ -48,7 +49,7 @@ object StatementReaderTest {
     BigDecimal(10.00),
     BigDecimal(0),
     BigDecimal(352.20))
-  val t4 = Transaction(new DateTime(14, 2, 2017),
+  val t4 = Transaction(new DateTime(2017, 2, 14, 0, 0),
     OutgoingPayment,
     "77-16-01",
     "75792260",
