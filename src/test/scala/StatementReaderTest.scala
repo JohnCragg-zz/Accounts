@@ -18,7 +18,7 @@ class StatementReaderTest extends FunSuite with Matchers {
   test("can parse a full sample statement into a List of Events") {
     val statement = new File("c:/working/dev/Accounts/src/test/resources/latestStatement.csv")
     val s = parseFile(statement)
-    println(s.toList)
+    println(s.toList) //RL look at all the good work im doing it
   }
 }
 
@@ -39,7 +39,7 @@ object StatementReaderTest {
     "CLARKE JAMES FOOTY FP17047O05526272",
     BigDecimal("0"),
     BigDecimal("6.10"),
-    BigDecimal("338.92")
+    BigDecimal("338.92") //RL BIgDecimal oi oi
   )
   val t3 = Transaction(new DateTime(2017, 2, 15, 0, 0),
     CashPoint,
@@ -57,5 +57,5 @@ object StatementReaderTest {
     BigDecimal(5.50),
     BigDecimal(0),
     BigDecimal(367.13))
-  val transactions = Seq(t1, t2, t3, t4)
+  val transactions = Seq(t1, t2, t3, t4) // RL Seq, we've all been there
 }
